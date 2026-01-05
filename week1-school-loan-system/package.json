@@ -6,13 +6,25 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:build": "docker compose build",
+    "docker:logs": "docker compose logs -f",
+    "docker:db:up": "docker compose up -d mongodb postgres redis",
+    "docker:db:down": "docker compose down mongodb postgres redis",
+    "docker:gui:up": "docker compose up -d pgadmin mongo-express",
+    "docker:gui:down": "docker compose down pgadmin mongo-express",
+    "docker:clean": "docker compose down -v --remove-orphans",
+    "db:setup": "npm run docker:db:up && sleep 15 && npm run dev",
+    "full:setup": "npm run docker:up && sleep 20 && npm run dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "express-validator": "^7.3.1",
