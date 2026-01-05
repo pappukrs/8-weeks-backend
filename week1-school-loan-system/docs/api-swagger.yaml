@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: School Loan System API
+  description: >
+    Backend APIs for School Loan System.
+    Built as part of Week 1 assignment of 8-weeks-backend.
+    Covers Users (MongoDB), Loans & Payments (PostgreSQL).
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local server
+
+tags:
+  - name: Users
+  - name: Loans
+  - name: Payments
+
+# 🔐 SECURITY
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    # ---------- COMMON ----------
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+
+    # ---------- USERS ----------
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: Pappu Kumar
+        email:
+          type: string
+          example: pappu@email.com
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 64a12bc9
+        name:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    # ---------- LOANS ----------
+    CreateLoanRequest:
+      type: object
+      required:
+        - userId
+        - amount
+      properties:
+        userId:
+          type: string
+          example: 64a12bc9
+        amount:
+          type: number
+          example: 50000
+
+    LoanResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        userId:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+          example: active
+        createdAt:
+          type: string
+          format: date-time
+
+    UpdateLoanStatusRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: closed
+
+    # ---------- PAYMENTS ----------
+    CreatePaymentRequest:
+      type: object
+      required:
+        - loanId
+        - amount
+      properties:
+        loanId:
+          type: integer
+          example: 1
+        amount:
+          type: number
+          example: 5000
+
+    PaymentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        loanId:
+          type: integer
+        amount:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+
+# 🔐 APPLY AUTH GLOBALLY
+security:
+  - BearerAuth: []
+
+paths:
+  # ================= USERS =================
+  /users:
+    post:
+      tags: [Users]
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        400:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}:
+    get:
+      tags: [Users]
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ================= LOANS =================
+  /loans:
+    post:
+      tags: [Loans]
+      summary: Create a loan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLoanRequest'
+      responses:
+        201:
+          description: Loan created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoanResponse'
+
+    get:
+      tags: [Loans]
+      summary: Get loans by userId
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+      responses:
+        200:
+          description: List of loans
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LoanResponse'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+  /loans/{id}/status:
+    patch:
+      tags: [Loans]
+      summary: Update loan status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLoanStatusRequest'
+      responses:
+        200:
+          description: Loan status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoanResponse'
+
+  # ================= PAYMENTS =================
+  /payments:
+    post:
+      tags: [Payments]
+      summary: Create payment (transactional)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        201:
+          description: Payment successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+
+    get:
+      tags: [Payments]
+      summary: Get payments by loanId
+      parameters:
+        - in: query
+          name: loanId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentResponse'
