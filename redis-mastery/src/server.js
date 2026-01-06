@@ -1,8 +1,15 @@
 const express = require("express");
 const redisClient = require("./config/redis.js");
+const routes = require("./routes.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+app.use(express.json());
+
+
+app.use("/api", routes);
 
 app.get("/", async (req, res) => {
     try {

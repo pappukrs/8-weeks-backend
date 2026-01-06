@@ -1,0 +1,46 @@
+const exerciseService = require("./exercise.service");
+
+const getExerciseOne = async(req, res) => {
+
+
+    try {
+
+    const result = await exerciseService.exerciseServiceOne();
+    console.log(result);
+  res.status(200).json({ message: "Exercise One executed", data: result });
+        
+    } catch (error) {
+        console.error("Error in Exercise One:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    } 
+};
+
+// Placeholder functions for other exercises
+const getExerciseTwo = async (req, res) => {
+   try {
+    const result = await exerciseService.exerciseServiceTwo();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Two executed", data: result });
+   } catch (error) {
+    console.error("Error in Exercise Two:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+   }
+};
+
+// const getExerciseThree = (req, res) => { /* ... */ };
+// const getExerciseFour = (req, res) => { /* ... */ };
+// const getExerciseFive = (req, res) => { /* ... */ };
+// const getExerciseSix = (req, res) => { /* ... */ };
+// const getExerciseSeven = (req, res) => { /* ... */ };
+// const getExerciseEight = (req, res) => { /* ... */ };
+
+module.exports = {
+  getExerciseOne,
+  getExerciseTwo,
+  // getExerciseThree,
+  // getExerciseFour,
+  // getExerciseFive,
+  // getExerciseSix,
+  // getExerciseSeven,
+  // getExerciseEight,
+};
