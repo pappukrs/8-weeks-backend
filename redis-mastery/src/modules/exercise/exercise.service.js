@@ -169,10 +169,58 @@ const exerciseServiceFive = async (userId) => {
 };
 
 
+const exerciseServiceSix = async () => {
+  const publisher = redisClient.duplicate();
+  const subscriber = redisClient.duplicate();
+
+  await subscriber.subscribe("notifications");
+
+  subscriber.on("message", (channel, message) => {
+    console.log("Received:", JSON.parse(message));
+  });
+
+  await publisher.publish(
+    "notifications",
+    JSON.stringify({
+      type: "INFO",
+      message: "Hello from publisher",
+      ts: Date.now(),
+    })
+  );
+
+  setTimeout(async () => {
+    await publisher.quit();
+    await subscriber.quit();
+  }, 1000);
+
+  return { message: "Pub/Sub test completed" };
+};
+
+
+const exerciseServiceSeven = async () => {
+  await redisClient.set("balance:A", 1000);
+  await redisClient.set("balance:B", 0);
+  const result = await redisClient.multi()
+  .decrby("balance:A", 100)
+  .incrby("balance:B", 100)
+  .exec();
+  console.log(result);
+
+  const balanceA = await redisClient.get("balance:A");
+  const balanceB = await redisClient.get("balance:B");
+  console.log("Balance A:", balanceA);
+  console.log("Balance B:", balanceB);
+  return { balanceA, balanceB, result };
+}
+
+
+
 module.exports = {
   exerciseServiceOne,
   exerciseServiceTwo,
   exerciseServiceThree,
   exerciseServiceFour,
   exerciseServiceFive,
+  exerciseServiceSix,
+  exerciseServiceSeven,
 };
