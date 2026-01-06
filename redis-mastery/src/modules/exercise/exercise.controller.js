@@ -27,7 +27,16 @@ const getExerciseTwo = async (req, res) => {
    }
 };
 
-// const getExerciseThree = (req, res) => { /* ... */ };
+const getExerciseThree = async (req, res) => { 
+  try {
+    const result = await exerciseService.exerciseServiceThree();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Three executed", data: result });
+  } catch (error) {
+    console.error("Error in Exercise Three:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 // const getExerciseFour = (req, res) => { /* ... */ };
 // const getExerciseFive = (req, res) => { /* ... */ };
 // const getExerciseSix = (req, res) => { /* ... */ };
@@ -37,7 +46,7 @@ const getExerciseTwo = async (req, res) => {
 module.exports = {
   getExerciseOne,
   getExerciseTwo,
-  // getExerciseThree,
+  getExerciseThree,
   // getExerciseFour,
   // getExerciseFive,
   // getExerciseSix,

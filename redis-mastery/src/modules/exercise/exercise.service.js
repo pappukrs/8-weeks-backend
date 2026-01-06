@@ -69,7 +69,47 @@ const exerciseServiceTwo = async () => {
 };
 
 
+const exerciseServiceThree = async () => {
+  const queueKey = "queue:email_jobs";
+
+  const jobs = [
+    { jobId: "1", status: "pending" },
+    { jobId: "2", status: "paid" },
+    { jobId: "3", status: "completed" },
+    { jobId: "4", status: "failed" },
+    { jobId: "5", status: "in_progress" },
+  ];
+
+  // 1️⃣ Push 5 jobs
+  for (const job of jobs) {
+    await redisClient.lpush(queueKey, JSON.stringify(job));
+  }
+
+  // 2️⃣ Check queue length
+  const jobLength = await redisClient.llen(queueKey);
+  console.log("Queue length:", jobLength);
+
+  // 3️⃣ Pop jobs one-by-one (worker simulation)
+  let job;
+  const processedJobs = [];
+
+  while ((job = await redisClient.rpop(queueKey))) {
+    processedJobs.push(JSON.parse(job));
+  }
+
+  // 4️⃣ Read remaining jobs
+  const remainingJobs = await redisClient.lrange(queueKey, 0, -1);
+
+  return {
+    jobLength,
+    processedJobs,
+    remainingJobs,
+  };
+};
+
+
 module.exports = {
   exerciseServiceOne,
   exerciseServiceTwo,
+  exerciseServiceThree,
 };
