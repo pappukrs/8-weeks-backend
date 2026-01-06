@@ -37,7 +37,17 @@ const getExerciseThree = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-// const getExerciseFour = (req, res) => { /* ... */ };
+
+const getExerciseFour = async (req, res) => {
+  try {
+    const result = await exerciseService.exerciseServiceFour();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Four executed", data: result });
+  } catch (error) {
+    console.error("Error in Exercise Four:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 // const getExerciseFive = (req, res) => { /* ... */ };
 // const getExerciseSix = (req, res) => { /* ... */ };
 // const getExerciseSeven = (req, res) => { /* ... */ };
@@ -47,7 +57,7 @@ module.exports = {
   getExerciseOne,
   getExerciseTwo,
   getExerciseThree,
-  // getExerciseFour,
+  getExerciseFour,
   // getExerciseFive,
   // getExerciseSix,
   // getExerciseSeven,

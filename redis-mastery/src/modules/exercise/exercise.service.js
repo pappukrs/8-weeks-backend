@@ -108,8 +108,32 @@ const exerciseServiceThree = async () => {
 };
 
 
+
+const exerciseServiceFour = async () => {
+  const userId = crypto.randomUUID();
+  const usersSetKey = "users:logged_in"; // 🔑 ONE SET
+
+  // 1️⃣ Add user ID to set (duplicates automatically ignored)
+  await redisClient.sadd(usersSetKey, userId);
+
+  // 2️⃣ Count unique users
+  const userCount = await redisClient.scard(usersSetKey);
+  console.log("Unique User Count:", userCount);
+
+  // 3️⃣ Check membership
+  const userExists = await redisClient.sismember(usersSetKey, userId);
+  console.log("User Exists:", userExists);
+
+  // 4️⃣ Get all users
+  const allUsers = await redisClient.smembers(usersSetKey);
+  console.log("All Users:", allUsers);
+
+  return { userCount, userExists, allUsers };
+};
+
 module.exports = {
   exerciseServiceOne,
   exerciseServiceTwo,
   exerciseServiceThree,
+  exerciseServiceFour,
 };
