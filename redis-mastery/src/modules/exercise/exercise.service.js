@@ -131,9 +131,48 @@ const exerciseServiceFour = async () => {
   return { userCount, userExists, allUsers };
 };
 
+const exerciseServiceFive = async (userId) => {
+  const rateKey = `rate:user:${userId}`;
+  const maxRequests = 5;
+  const windowMs = 60 * 1000;
+  const now = Date.now();
+
+  // 1️⃣ Add current request
+  await redisClient.zadd(rateKey, now, `${now}`);
+
+  // 2️⃣ Remove requests outside window
+  await redisClient.zremrangebyscore(
+    rateKey,
+    0,
+    now - windowMs
+  );
+
+  // 3️⃣ Count requests in window
+  const requestCount = await redisClient.zcard(rateKey);
+
+  // 4️⃣ Set expiry (only once)
+  await redisClient.expire(rateKey, 60);
+
+  // 5️⃣ Check limit
+  const remainingRequests = Math.max(
+    maxRequests - requestCount,
+    0
+  );
+
+  const allowed = requestCount <= maxRequests;
+
+  return {
+    allowed,
+    requestCount,
+    remainingRequests,
+  };
+};
+
+
 module.exports = {
   exerciseServiceOne,
   exerciseServiceTwo,
   exerciseServiceThree,
   exerciseServiceFour,
+  exerciseServiceFive,
 };
