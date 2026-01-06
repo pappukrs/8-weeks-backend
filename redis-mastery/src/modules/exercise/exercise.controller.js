@@ -79,7 +79,63 @@ const getExerciseSeven = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-// const getExerciseEight = (req, res) => { /* ... */ };
+const getExerciseEight = async (req, res) => {
+  try {
+    const result = await exerciseService.exerciseServiceEight();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Eight executed", data: result });
+  } catch (error) {
+    console.error("Error in Exercise Eight:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getExerciseNine = async (req, res) => {
+  try {
+    const result = await exerciseService.exerciseServiceNine();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Nine executed", data: result });
+  } catch (error) {
+    console.error("Error in Exercise Nine:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getExerciseTen = async (req, res) => {
+  try {
+    const result = await exerciseService.exerciseServiceTen();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Ten executed", data: result });
+  } catch (error) {
+    console.error("Error in Exercise Ten:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getExerciseEleven = async (req, res) => {
+  try {
+    const result = await exerciseService.exerciseServiceEleven();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Eleven executed", data: result });
+  } catch (error) {
+    console.error("Error in Exercise Eleven:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+const getExerciseTwelve = async (req, res) => {
+  try {
+    const result = await exerciseService.exerciseServiceTwelve();
+    console.log(result);
+    res.status(200).json({ message: "Exercise Twelve executed", data: result });
+  } catch (error) {
+    console.error("Error in Exercise Twelve:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+  
+
 
 module.exports = {
   getExerciseOne,
@@ -89,5 +145,9 @@ module.exports = {
   getExerciseFive,
   getExerciseSix,
   getExerciseSeven,
-  // getExerciseEight,
+  getExerciseEight,
+  getExerciseNine,
+  getExerciseTen,
+  getExerciseEleven,
+  getExerciseTwelve
 };

@@ -1,5 +1,6 @@
 const redisClient = require("../../config/redis");
 const crypto = require("crypto");
+const { pipelinePerformanceTest } = require("../../utils/pipelinePerformanceTest");
 
 
 const exerciseServiceOne = async () => {
@@ -214,6 +215,155 @@ const exerciseServiceSeven = async () => {
 }
 
 
+const exerciseServiceEight = async () => {
+  
+    try {
+      const result = await pipelinePerformanceTest();
+      return result;
+    } catch (err) {
+      console.error(err);
+      return { error: "Pipeline test failed" };
+    }
+  
+}
+
+const exerciseServiceNine = async () => {
+
+  redisClient.defineCommand("incrWithTtl", {
+    numberOfKeys: 1,
+    lua: `
+      if redis.call("EXISTS", KEYS[1]) == 1 then
+        return redis.call("INCR", KEYS[1])
+      else
+        redis.call("SET", KEYS[1], 1, "EX", ARGV[1])
+        return 1
+      end
+    `,
+  });
+  
+  const count = await redisClient.incrWithTtl("hits", 60);
+  
+  return { count };
+}
+
+
+const exerciseServiceTen = async () => {
+  const stream = "orders:stream";
+  const group = "order-service";
+  const consumer = "worker-1";
+
+  // Producer
+  await redisClient.xadd(stream, "*", "orderId", "101", "status", "CREATED");
+  await redisClient.xadd(stream, "*", "orderId", "102", "status", "PAID");
+
+  // Create group (idempotent)
+  try {
+    await redisClient.xgroup("CREATE", stream, group, "$", "MKSTREAM");
+  } catch (err) {
+    if (!err.message.includes("BUSYGROUP")) throw err;
+  }
+
+  // Consumer read
+  const messages = await redisClient.xreadgroup(
+    "GROUP",
+    group,
+    consumer,
+    "COUNT",
+    1,
+    "STREAMS",
+    stream,
+    ">"
+  );
+
+  if (!messages) {
+    return { message: "No new events" };
+  }
+
+  const messageId = messages[0][1][0][0];
+  const fields = messages[0][1][0][1];
+
+  // ACK
+  await redisClient.xack(stream, group, messageId);
+
+  return {
+    messageId,
+    fields,
+    status: "Processed and ACKed",
+  };
+};
+
+
+const exerciseServiceEleven = async () => {
+  let allKeys = [];
+  let cursor = "0";
+
+  do {
+    const [nextCursor, keys] = await redisClient.scan(
+      cursor,
+      "MATCH",
+      "user:*",
+      "COUNT",
+      100
+    );
+    cursor = nextCursor;
+    allKeys = allKeys.concat(keys);
+    console.log("Found keys:", keys);
+  } while (cursor !== "0");
+
+  const type = await redisClient.type("session:123");
+  console.log("Key type:", type); // string | hash | list | set | zset
+
+  const keyCount = await redisClient.dbsize();
+  console.log("Total keys:", keyCount);
+
+  const serverInfo = await redisClient.info();
+  const keyspaceInfo = await redisClient.info("keyspace");
+
+  return {
+    scannedKeys: allKeys,
+    keyType: type,
+    totalKeys: keyCount,
+    serverInfo: serverInfo.substring(0, 200) + "...", // Truncate for readability
+    keyspaceInfo
+  };
+}
+
+
+const exerciseServiceTwelve = async () => {
+  const key = "drivers";
+
+  // 1️⃣ Add locations
+  await redisClient.geoadd(key, 77.1025, 28.7041, "driver:1");
+  await redisClient.geoadd(key, 77.2167, 28.6448, "driver:2");
+  await redisClient.geoadd(key, 77.2090, 28.6139, "driver:3");
+
+  // 2️⃣ Find nearby drivers
+  const nearby = await redisClient.geosearch(
+    key,
+    "FROMLONLAT",
+    77.2167,
+    28.6448,
+    "BYRADIUS",
+    5,
+    "km",
+    "WITHDIST"
+  );
+
+  // 3️⃣ Measure distance
+  const distance = await redisClient.geodist(
+    key,
+    "driver:1",
+    "driver:3",
+    "km"
+  );
+
+  return {
+    nearbyDrivers: nearby,
+    distanceBetweenDrivers: distance,
+  };
+};
+
+
 
 module.exports = {
   exerciseServiceOne,
@@ -223,4 +373,10 @@ module.exports = {
   exerciseServiceFive,
   exerciseServiceSix,
   exerciseServiceSeven,
+  exerciseServiceEight,
+  exerciseServiceNine,
+  exerciseServiceTen,
+  exerciseServiceEleven,
+  exerciseServiceTwelve
+
 };

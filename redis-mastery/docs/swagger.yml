@@ -1,0 +1,580 @@
+openapi: 3.0.3
+info:
+  title: Redis Mastery API
+  description: |
+    A comprehensive Node.js/Express API demonstrating advanced Redis features through 12 practical exercises.
+
+    ## Features
+    - Complete Redis integration with ioredis
+    - 12 comprehensive exercises covering all major Redis data structures
+    - RESTful API design with proper error handling
+    - Performance optimization examples
+    - Real-world use cases
+
+    ## Redis Concepts Covered
+    - **Strings**: Counters, TTL, caching
+    - **Hashes**: Object storage, user profiles
+    - **Lists**: Queues, recent items, messaging
+    - **Sets**: Unique collections, tags, followers
+    - **Sorted Sets**: Leaderboards, rankings
+    - **Streams**: Event sourcing, messaging
+    - **Geospatial**: Location-based queries
+    - **Pub/Sub**: Real-time messaging
+    - **Transactions**: Atomic operations
+    - **Lua Scripting**: Server-side logic
+    - **Pipelining**: Performance optimization
+  version: 1.0.0
+  contact:
+    name: Redis Mastery Project
+  license:
+    name: ISC
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  - url: https://api.redis-mastery.com
+    description: Production server
+
+tags:
+  - name: Root
+    description: Basic application endpoints
+  - name: Exercises
+    description: Redis mastery exercises
+
+paths:
+  /:
+    get:
+      tags:
+        - Root
+      summary: Get visit counter
+      description: |
+        Returns the current visit count with Redis caching.
+        Demonstrates basic Redis string operations with TTL.
+      responses:
+        '200':
+          description: Successful response with visit count
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Number of visits: 42"
+        '500':
+          description: Redis connection error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Error connecting to Redis"
+
+  /api/exercise/:
+    get:
+      tags:
+        - Exercises
+      summary: Welcome message
+      description: Returns a welcome message for the Redis exercises
+      responses:
+        '200':
+          description: Welcome message
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Welcome to the Redis Mastery Exercises!"
+
+  /api/exercise/one:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise One - Strings, Lists & TTL
+      description: |
+        Demonstrates Redis string operations, OTP generation, and list management.
+
+        **Redis Operations:**
+        - INCR: Visit counter
+        - SET with EX: OTP with expiration
+        - LPUSH & LTRIM: Recent OTPs list
+        - TTL: Check expiration time
+      responses:
+        '200':
+          description: Exercise executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise One executed"
+                  data:
+                    type: object
+                    properties:
+                      visitorCount:
+                        type: integer
+                        description: Total visit count
+                        example: 42
+                      otpToken:
+                        type: string
+                        description: Generated OTP token
+                        example: "123456"
+                      ttl:
+                        type: integer
+                        description: OTP time to live in seconds
+                        example: 30
+                      recentOtps:
+                        type: array
+                        items:
+                          type: string
+                        description: List of recent OTPs
+                        example: ["123456", "789012", "345678"]
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/two:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Two - Transactions
+      description: |
+        Demonstrates Redis transactions with MULTI/EXEC commands.
+
+        **Redis Operations:**
+        - MULTI: Start transaction
+        - SET: User balance operations
+        - EXEC: Execute transaction atomically
+      responses:
+        '200':
+          description: Transaction completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Two executed"
+                  data:
+                    type: object
+                    description: Transaction result
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/three:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Three - Hash Operations
+      description: |
+        Demonstrates Redis hash data structure for storing user profiles.
+
+        **Redis Operations:**
+        - HSET: Set hash fields
+        - HGETALL: Get all hash fields
+        - HDEL: Delete hash fields
+      responses:
+        '200':
+          description: Hash operations completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Three executed"
+                  data:
+                    type: object
+                    description: Hash operation results
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/four:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Four - Set Operations
+      description: |
+        Demonstrates Redis set operations for unique collections.
+
+        **Redis Operations:**
+        - SADD: Add members to set
+        - SREM: Remove members from set
+        - SISMEMBER: Check membership
+        - SUNION: Set union operations
+      responses:
+        '200':
+          description: Set operations completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Four executed"
+                  data:
+                    type: object
+                    description: Set operation results
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/five:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Five - Sorted Sets
+      description: |
+        Demonstrates Redis sorted sets for rankings and leaderboards.
+
+        **Redis Operations:**
+        - ZADD: Add members with scores
+        - ZRANGE: Get range by position
+        - ZREVRANGE: Get range in reverse order
+        - ZSCORE: Get member score
+      responses:
+        '200':
+          description: Sorted set operations completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Five executed"
+                  data:
+                    type: object
+                    description: Sorted set operation results
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/six:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Six - Pub/Sub Messaging
+      description: |
+        Demonstrates Redis publish/subscribe pattern for real-time messaging.
+
+        **Redis Operations:**
+        - PUBLISH: Send messages to channels
+        - SUBSCRIBE: Listen to channels
+        - UNSUBSCRIBE: Stop listening
+      responses:
+        '200':
+          description: Pub/Sub test completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Six executed"
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Pub/Sub test completed"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/seven:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Seven - Financial Transactions
+      description: |
+        Demonstrates atomic financial transactions using Redis transactions.
+
+        **Redis Operations:**
+        - MULTI: Start transaction
+        - DECRBY/INCRBY: Balance transfers
+        - EXEC: Atomic execution
+      responses:
+        '200':
+          description: Financial transaction completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Seven executed"
+                  data:
+                    type: object
+                    properties:
+                      balanceA:
+                        type: integer
+                        description: Account A balance
+                        example: 900
+                      balanceB:
+                        type: integer
+                        description: Account B balance
+                        example: 100
+                      result:
+                        type: array
+                        description: Transaction execution results
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/eight:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Eight - Pipeline Performance
+      description: |
+        Demonstrates Redis pipelining for improved performance.
+
+        **Redis Operations:**
+        - Pipeline: Batch multiple commands
+        - Performance comparison: Pipelined vs sequential
+      responses:
+        '200':
+          description: Pipeline performance test completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Eight executed"
+                  data:
+                    type: object
+                    description: Performance test results
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/nine:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Nine - Lua Scripting
+      description: |
+        Demonstrates Redis Lua scripting for custom server-side logic.
+
+        **Redis Operations:**
+        - EVAL: Execute Lua scripts
+        - Custom commands with TTL logic
+      responses:
+        '200':
+          description: Lua script executed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Nine executed"
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Hit counter value
+                        example: 1
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/ten:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Ten - Stream Processing
+      description: |
+        Demonstrates Redis streams for event sourcing and messaging.
+
+        **Redis Operations:**
+        - XADD: Add events to stream
+        - XREADGROUP: Consumer group reading
+        - XACK: Acknowledge message processing
+      responses:
+        '200':
+          description: Stream processing completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Ten executed"
+                  data:
+                    type: object
+                    properties:
+                      messageId:
+                        type: string
+                        description: Stream message ID
+                        example: "1703123456789-0"
+                      fields:
+                        type: object
+                        description: Message fields
+                        example: { "orderId": "101", "status": "CREATED" }
+                      status:
+                        type: string
+                        example: "Processed and ACKed"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/eleven:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Eleven - Database Inspection
+      description: |
+        Demonstrates Redis database inspection and monitoring commands.
+
+        **Redis Operations:**
+        - SCAN: Safe key iteration
+        - TYPE: Check key types
+        - DBSIZE: Count total keys
+        - INFO: Server information
+      responses:
+        '200':
+          description: Database inspection completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Eleven executed"
+                  data:
+                    type: object
+                    properties:
+                      scannedKeys:
+                        type: array
+                        items:
+                          type: string
+                        description: Keys found during scan
+                        example: ["user:1", "user:2", "session:abc"]
+                      keyType:
+                        type: string
+                        description: Type of inspected key
+                        example: "none"
+                      totalKeys:
+                        type: integer
+                        description: Total keys in database
+                        example: 209
+                      serverInfo:
+                        type: string
+                        description: Redis server information (truncated)
+                      keyspaceInfo:
+                        type: string
+                        description: Keyspace statistics
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/exercise/twelve:
+    get:
+      tags:
+        - Exercises
+      summary: Exercise Twelve - Geospatial Queries
+      description: |
+        Demonstrates Redis geospatial capabilities for location-based queries.
+
+        **Redis Operations:**
+        - GEOADD: Add location coordinates
+        - GEOSEARCH: Find nearby locations
+        - GEODIST: Calculate distances
+      responses:
+        '200':
+          description: Geospatial query completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exercise Twelve executed"
+                  data:
+                    type: object
+                    properties:
+                      nearbyDrivers:
+                        type: array
+                        items:
+                          type: array
+                          items:
+                            type: string
+                        description: Nearby drivers with distances
+                        example: [["driver:2", "0.0002"], ["driver:3", "3.5181"]]
+                      distanceBetweenDrivers:
+                        type: string
+                        description: Distance between drivers in km
+                        example: "14.4464"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Internal Server Error"
+      required:
+        - message
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (if implemented)
+
+security:
+  - ApiKeyAuth: []

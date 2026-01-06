@@ -18,7 +18,11 @@ router.get("/four", exerciseController.getExerciseFour);
 router.get("/five", exerciseController.getExerciseFive);      
 router.get("/six", exerciseController.getExerciseSix);
 router.get("/seven", exerciseController.getExerciseSeven);
-// router.get("/eight", exerciseController.getExerciseEight);
+router.get("/eight", exerciseController.getExerciseEight);
+router.get("/nine", exerciseController.getExerciseNine);
+router.get("/ten", exerciseController.getExerciseTen);
+router.get("/eleven", exerciseController.getExerciseEleven);
+router.get("/twelve", exerciseController.getExerciseTwelve);
 
 
 
