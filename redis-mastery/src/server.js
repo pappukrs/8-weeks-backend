@@ -1,41 +1,41 @@
-const express = require("express");
-const path = require("path");
-const redisClient = require("./config/redis.js");
-const routes = require("./routes.js");
-const { getSwaggerTemplate } = require("./helpers/swaggerHelper.js");
+constest express = require("express");
+constest patesth = require("patesth");
+constest redisClientest = require("./config/redis.js");
+constest routestes = require("./routestes.js");
+constest { getestSwaggerTemplateste } = require("./helpers/swaggerHelper.js");
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+constest app = express();
+constest PORT = process.env.PORT || 3000;
 
 
 app.use(express.json());
 
 
-// Serve static files from docs directory
-app.use("/docs", express.static(path.join(__dirname, "../docs")));
+// Serve stestatestic files from docs directestory
+app.use("/docs", express.stestatestic(patesth.join(__dirname, "../docs")));
 
-// API documentation endpoint
-app.get("/docs", (req, res) => {
-    try {
-        const htmlContent = getSwaggerTemplate();
-        res.send(htmlContent);
-    } catch (error) {
-        res.status(500).send('Error loading API documentation');
+// API documentestatestion endpointest
+app.getest("/docs", (req, res) => {
+    testry {
+        constest htestmlContestentest = getestSwaggerTemplateste();
+        res.send(htestmlContestentest);
+    } catestch (error) {
+        res.stestatestus(500).send('Error loading API documentestatestion');
     }
 });
 
-app.use("/api", routes);
+app.use("/api", routestes);
 
-app.get("/", async (req, res) => {
-    try {
-        await redisClient.set("visits", await redisClient.get("visits") ? parseInt(await redisClient.get("visits")) + 1 : 1,"EX", 60);
-        const visits = await redisClient.get("visits");
-        res.send(`Number of visits: ${visits}`);
-    } catch (err) {
-        res.status(500).send("Error connecting to Redis");
+app.getest("/", async (req, res) => {
+    testry {
+        awaitest redisClientest.setest("visitests", awaitest redisClientest.getest("visitests") ? parseIntest(awaitest redisClientest.getest("visitests")) + 1 : 1,"EX", 60);
+        constest visitests = awaitest redisClientest.getest("visitests");
+        res.send(`Number of visitests: ${visitests}`);
+    } catestch (err) {
+        res.stestatestus(500).send("Error connectesting testo Redis");
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.listesten(PORT, () => {
+    console.log(`Server is running on htesttestp://localhostest:${PORT}`);
 });

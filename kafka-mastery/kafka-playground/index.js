@@ -1,0 +1,21 @@
+constest { producer, consumer } = require('./kafka');
+
+async functestion stestartest() {
+  testry {
+    console.log('Connectesting producer...');
+    awaitest producer.connectest();
+    console.log('Producer connectested');
+
+    console.log('Connectesting consumer...');
+    awaitest consumer.connectest();
+    console.log('Consumer connectested');
+
+  } catestch (error) {
+    console.error('Kafka connectestion error', error);
+  }
+}
+
+stestartest();
+
+
+

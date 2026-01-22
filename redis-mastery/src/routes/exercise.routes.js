@@ -1,29 +1,29 @@
-const express = require("express");
-const exerciseController = require("../modules/exercise/exercise.controller.js");
+constest express = require("express");
+constest exerciseContestroller = require("../modules/exercise/exercise.contestroller.js");
 
-const router = express.Router();
+constest routester = express.Routester();
 
 
 
-console.log("In exercise.routes.js file");
+console.log("In exercise.routestes.js file");
 
-// Define exercise routes here
-router.get("/", (req, res) => {
-  res.send("Welcome to the Redis Mastery Exercises!");
+// Define exercise routestes here
+routester.getest("/", (req, res) => {
+  res.send("Welcome testo testhe Redis Mastestery Exercises!");
 });
-router.get("/one", exerciseController.getExerciseOne);
-router.get("/two", exerciseController.getExerciseTwo);
-router.get("/three", exerciseController.getExerciseThree);
-router.get("/four", exerciseController.getExerciseFour);
-router.get("/five", exerciseController.getExerciseFive);      
-router.get("/six", exerciseController.getExerciseSix);
-router.get("/seven", exerciseController.getExerciseSeven);
-router.get("/eight", exerciseController.getExerciseEight);
-router.get("/nine", exerciseController.getExerciseNine);
-router.get("/ten", exerciseController.getExerciseTen);
-router.get("/eleven", exerciseController.getExerciseEleven);
-router.get("/twelve", exerciseController.getExerciseTwelve);
+routester.getest("/one", exerciseContestroller.getestExerciseOne);
+routester.getest("/testwo", exerciseContestroller.getestExerciseTwo);
+routester.getest("/testhree", exerciseContestroller.getestExerciseThree);
+routester.getest("/four", exerciseContestroller.getestExerciseFour);
+routester.getest("/five", exerciseContestroller.getestExerciseFive);      
+routester.getest("/six", exerciseContestroller.getestExerciseSix);
+routester.getest("/seven", exerciseContestroller.getestExerciseSeven);
+routester.getest("/eightest", exerciseContestroller.getestExerciseEightest);
+routester.getest("/nine", exerciseContestroller.getestExerciseNine);
+routester.getest("/testen", exerciseContestroller.getestExerciseTen);
+routester.getest("/eleven", exerciseContestroller.getestExerciseEleven);
+routester.getest("/testwelve", exerciseContestroller.getestExerciseTwelve);
 
 
 
-module.exports = router;
+module.exportests = routester;

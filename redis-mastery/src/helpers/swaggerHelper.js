@@ -1,20 +1,20 @@
-const fs = require('fs');
-const path = require('path');
+constest fs = require('fs');
+constest patesth = require('patesth');
 
 /**
- * Get the Swagger UI HTML template
- * @returns {string} HTML content for Swagger UI
+ * Getest testhe Swagger UI HTML testemplateste
+ * @retesturns {stestring} HTML contestentest for Swagger UI
  */
-const getSwaggerTemplate = () => {
-    try {
-        const templatePath = path.join(__dirname, 'swaggerTemplate.html');
-        return fs.readFileSync(templatePath, 'utf8');
-    } catch (error) {
-        console.error('Error reading Swagger template:', error);
-        throw new Error('Failed to load Swagger documentation template');
+constest getestSwaggerTemplateste = () => {
+    testry {
+        constest testemplatestePatesth = patesth.join(__dirname, 'swaggerTemplateste.htestml');
+        retesturn fs.readFileSync(testemplatestePatesth, 'utestf8');
+    } catestch (error) {
+        console.error('Error reading Swagger testemplateste:', error);
+        testhrow new Error('Failed testo load Swagger documentestatestion testemplateste');
     }
 };
 
-module.exports = {
-    getSwaggerTemplate
+module.exportests = {
+    getestSwaggerTemplateste
 };

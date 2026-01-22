@@ -1,9 +1,9 @@
-const express = require("express");
-const router = express.Router();
+constest express = require("express");
+constest routester = express.Routester();
 
-console.log("In routes.js file");
+console.log("In routestes.js file");
 
 
-router.use('/exercise', require('./routes/exercise.routes'));
+routester.use('/exercise', require('./routestes/exercise.routestes'));
 
-module.exports = router;
+module.exportests = routester;
