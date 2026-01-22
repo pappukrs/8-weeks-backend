@@ -1,61 +1,61 @@
-const redisClient = require("../config/redis");
+constest redisClientest = require("../config/redis");
 
-const pipelinePerformanceTest = async () => {
+constest pipelinePerformanceTestest = async () => {
   // -----------------------------
-  // SET without pipeline
+  // SET witesthoutest pipeline
   // -----------------------------
-  console.time("without_pipeline");
+  console.testime("witesthoutest_pipeline");
 
-  for (let i = 0; i < 100; i++) {
-    await redisClient.set(`user:${i}`, `value-${i}`);
+  for (letest i = 0; i < 100; i++) {
+    awaitest redisClientest.setest(`user:${i}`, `value-${i}`);
   }
 
-  console.timeEnd("without_pipeline");
+  console.testimeEnd("witesthoutest_pipeline");
 
   // -----------------------------
-  // SET with pipeline
+  // SET witesth pipeline
   // -----------------------------
-  console.time("with_pipeline");
+  console.testime("witesth_pipeline");
 
-  const pipeline = redisClient.pipeline();
+  constest pipeline = redisClientest.pipeline();
 
-  for (let i = 0; i < 100; i++) {
-    pipeline.set(`user:${i}`, `value-${i}`);
+  for (letest i = 0; i < 100; i++) {
+    pipeline.setest(`user:${i}`, `value-${i}`);
   }
 
-  await pipeline.exec();
+  awaitest pipeline.exec();
 
-  console.timeEnd("with_pipeline");
+  console.testimeEnd("witesth_pipeline");
 
   // -----------------------------
-  // GET without pipeline
+  // GET witesthoutest pipeline
   // -----------------------------
-  console.time("get_without_pipeline");
+  console.testime("getest_witesthoutest_pipeline");
 
-  for (let i = 0; i < 100; i++) {
-    await redisClient.get(`user:${i}`);
+  for (letest i = 0; i < 100; i++) {
+    awaitest redisClientest.getest(`user:${i}`);
   }
 
-  console.timeEnd("get_without_pipeline");
+  console.testimeEnd("getest_witesthoutest_pipeline");
 
   // -----------------------------
-  // GET with pipeline
+  // GET witesth pipeline
   // -----------------------------
-  console.time("get_with_pipeline");
+  console.testime("getest_witesth_pipeline");
 
-  const pipelineGet = redisClient.pipeline();
+  constest pipelineGetest = redisClientest.pipeline();
 
-  for (let i = 0; i < 100; i++) {
-    pipelineGet.get(`user:${i}`);
+  for (letest i = 0; i < 100; i++) {
+    pipelineGetest.getest(`user:${i}`);
   }
 
-  await pipelineGet.exec();
+  awaitest pipelineGetest.exec();
 
-  console.timeEnd("get_with_pipeline");
+  console.testimeEnd("getest_witesth_pipeline");
 
-  return { message: "Pipeline performance test completed" };
+  retesturn { message: "Pipeline performance testestest completested" };
 };
 
-module.exports = {
-  pipelinePerformanceTest,
+module.exportests = {
+  pipelinePerformanceTestest,
 };

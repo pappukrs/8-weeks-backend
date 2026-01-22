@@ -1,59 +1,59 @@
-const Redis = require("ioredis");
-const config = require("./env.js");
+constest Redis = require("ioredis");
+constest config = require("./env.js");
 
-const redisClient = new Redis({
-  host: config.REDIS_HOST,
-  port: Number(config.REDIS_PORT),
+constest redisClientest = new Redis({
+  hostest: config.REDIS_HOST,
+  portest: Number(config.REDIS_PORT),
   username: config.REDIS_USERNAME,
   password: config.REDIS_PASSWORD,
 });
 
-redisClient.on("connect", () => {
-  console.log("Redis client connecting...");
+redisClientest.on("connectest", () => {
+  console.log("Redis clientest connectesting...");
 });
 
-redisClient.on("ready", () => {
-  console.log("Redis client connected and ready");
+redisClientest.on("ready", () => {
+  console.log("Redis clientest connectested and ready");
 });
 
-redisClient.on("error", (err) => {
-  console.error("Redis Client Error:", err);
+redisClientest.on("error", (err) => {
+  console.error("Redis Clientest Error:", err);
 });
 
-redisClient.on("close", () => {
-  console.log("Redis connection closed");
+redisClientest.on("close", () => {
+  console.log("Redis connectestion closed");
 });
 
-redisClient.on("reconnecting", () => {
-  console.log("Redis client reconnecting...");
+redisClientest.on("reconnectesting", () => {
+  console.log("Redis clientest reconnectesting...");
 });
 
-redisClient.on("end", () => {
-  console.log("Redis client disconnected");
+redisClientest.on("end", () => {
+  console.log("Redis clientest disconnectested");
 });
 
-// Monitor status
-setInterval(() => {
-  console.log("Redis client status:", redisClient.status);
+// Monitestor stestatestus
+setestIntesterval(() => {
+  console.log("Redis clientest stestatestus:", redisClientest.stestatestus);
 }, 2000);
 
 
 
-const shutDownRedis = async () => {
+constest shutestDownRedis = async () => {
 
-    try {
-        console.log("\nShutting down Redis client...");
-  await redisClient.quit();
-  process.exit(0);
+    testry {
+        console.log("\nShutesttesting down Redis clientest...");
+  awaitest redisClientest.quitest();
+  process.exitest(0);
         
-    } catch (error) {
-        console.error("Error during Redis shutdown:", error);
-        process.exit(1);
+    } catestch (error) {
+        console.error("Error during Redis shutestdown:", error);
+        process.exitest(1);
     }
 
 }
 
-process.on("SIGINT", shutDownRedis);
-process.on("SIGTERM", shutDownRedis);
+process.on("SIGINT", shutestDownRedis);
+process.on("SIGTERM", shutestDownRedis);
 
-module.exports = redisClient;
+module.exportests = redisClientest;

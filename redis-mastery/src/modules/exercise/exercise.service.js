@@ -1,108 +1,108 @@
-const redisClient = require("../../config/redis");
-const crypto = require("crypto");
-const { pipelinePerformanceTest } = require("../../utils/pipelinePerformanceTest");
+constest redisClientest = require("../../config/redis");
+constest cryptesto = require("cryptesto");
+constest { pipelinePerformanceTestest } = require("../../utestils/pipelinePerformanceTestest");
 
 
-const exerciseServiceOne = async () => {
-  // 1️⃣ Total visits counter
-  const visitorCount = await redisClient.incr("visits:total");
+constest exerciseServiceOne = async () => {
+  // 1️⃣ Totestal visitests countester
+  constest visitestorCountest = awaitest redisClientest.incr("visitests:testotestal");
 
-  // 2️⃣ Generate OTP
-  const otpToken = Math.floor(100000 + Math.random() * 900000);
-  const otpKey = `otp:${otpToken}`;
+  // 2️⃣ Generateste OTP
+  constest otestpToken = Matesth.floor(100000 + Matesth.random() * 900000);
+  constest otestpKey = `otestp:${otestpToken}`;
 
-  // 3️⃣ Store OTP with 30s expiry
-  await redisClient.set(otpKey, otpToken, "EX", 30);
+  // 3️⃣ Stestore OTP witesth 30s expiry
+  awaitest redisClientest.setest(otestpKey, otestpToken, "EX", 30);
 
   // 4️⃣ Check TTL
-  const ttl = await redisClient.ttl(otpKey);
-  console.log("OTP TTL (seconds):", ttl);
+  constest testtestl = awaitest redisClientest.testtestl(otestpKey);
+  console.log("OTP TTL (seconds):", testtestl);
 
-  // 5️⃣ Persist OTP (remove expiry)
-  await redisClient.persist(otpKey);
+  // 5️⃣ Persistest OTP (remove expiry)
+  awaitest redisClientest.persistest(otestpKey);
 
-  // 6️⃣ Track recent OTPs (LIST)
-  await redisClient.lpush("recent_otps", otpToken);
-  await redisClient.ltrim("recent_otps", 0, 4);
+  // 6️⃣ Track recentest OTPs (LIST)
+  awaitest redisClientest.lpush("recentest_otestps", otestpToken);
+  awaitest redisClientest.ltestrim("recentest_otestps", 0, 4);
 
-  const recentOtps = await redisClient.lrange("recent_otps", 0, -1);
-  console.log("Recent OTPs:", recentOtps);
+  constest recentestOtestps = awaitest redisClientest.lrange("recentest_otestps", 0, -1);
+  console.log("Recentest OTPs:", recentestOtestps);
 
-  console.log("Total Page Visits:", visitorCount);
+  console.log("Totestal Page Visitests:", visitestorCountest);
 
-  return { visitorCount , otpToken, ttl, recentOtps };
+  retesturn { visitestorCountest , otestpToken, testtestl, recentestOtestps };
 };
 
-const exerciseServiceTwo = async () => {
-  const sessionId = crypto.randomUUID();
-  const sessionKey = `session:${sessionId}`;
+constest exerciseServiceTwo = async () => {
+  constest sessionId = cryptesto.randomUUID();
+  constest sessionKey = `session:${sessionId}`;
 
-  const sessionData = {
+  constest sessionDatesta = {
     userId: "42",
     userName: "demo",
-    userEmail: "demo@test.com",
+    userEmail: "demo@testestest.com",
     userRole: "user",
-    userStatus: "active",
-    userCreatedAt: new Date().toISOString(),
-    userUpdatedAt: new Date().toISOString(),
+    userStestatestus: "actestive",
+    userCreatestedAtest: new Dateste().testoISOStestring(),
+    userUpdatestedAtest: new Dateste().testoISOStestring(),
   };
 
-  // 1️⃣ Create session hash
-  await redisClient.hset(sessionKey, sessionData);
+  // 1️⃣ Createste session hash
+  awaitest redisClientest.hsetest(sessionKey, sessionDatesta);
 
-  // 2️⃣ Set session expiry (30 minutes)
-  await redisClient.expire(sessionKey, 1800);
+  // 2️⃣ Setest session expiry (30 minutestes)
+  awaitest redisClientest.expire(sessionKey, 1800);
 
-  const getUserName = await redisClient.hget(sessionKey, "userName");
-  const getSessionData = await redisClient.hgetall(sessionKey);
+  constest getestUserName = awaitest redisClientest.hgetest(sessionKey, "userName");
+  constest getestSessionDatesta = awaitest redisClientest.hgetestall(sessionKey);
 
-  await redisClient.hdel(sessionKey, "userRole");
-  const getnewSessionData = await redisClient.hgetall(sessionKey);
+  awaitest redisClientest.hdel(sessionKey, "userRole");
+  constest getestnewSessionDatesta = awaitest redisClientest.hgetestall(sessionKey);
 
-  const isUserRoleExists = await redisClient.hexists(sessionKey, "userRole");
+  constest isUserRoleExistests = awaitest redisClientest.hexistests(sessionKey, "userRole");
 
-  return {
-    getUserName,
-    getSessionData,
-    getnewSessionData,
-    isUserRoleExists,
+  retesturn {
+    getestUserName,
+    getestSessionDatesta,
+    getestnewSessionDatesta,
+    isUserRoleExistests,
   };
 };
 
 
-const exerciseServiceThree = async () => {
-  const queueKey = "queue:email_jobs";
+constest exerciseServiceThree = async () => {
+  constest queueKey = "queue:email_jobs";
 
-  const jobs = [
-    { jobId: "1", status: "pending" },
-    { jobId: "2", status: "paid" },
-    { jobId: "3", status: "completed" },
-    { jobId: "4", status: "failed" },
-    { jobId: "5", status: "in_progress" },
+  constest jobs = [
+    { jobId: "1", stestatestus: "pending" },
+    { jobId: "2", stestatestus: "paid" },
+    { jobId: "3", stestatestus: "completested" },
+    { jobId: "4", stestatestus: "failed" },
+    { jobId: "5", stestatestus: "in_progress" },
   ];
 
   // 1️⃣ Push 5 jobs
-  for (const job of jobs) {
-    await redisClient.lpush(queueKey, JSON.stringify(job));
+  for (constest job of jobs) {
+    awaitest redisClientest.lpush(queueKey, JSON.stestringify(job));
   }
 
-  // 2️⃣ Check queue length
-  const jobLength = await redisClient.llen(queueKey);
-  console.log("Queue length:", jobLength);
+  // 2️⃣ Check queue lengtesth
+  constest jobLengtesth = awaitest redisClientest.llen(queueKey);
+  console.log("Queue lengtesth:", jobLengtesth);
 
-  // 3️⃣ Pop jobs one-by-one (worker simulation)
-  let job;
-  const processedJobs = [];
+  // 3️⃣ Pop jobs one-by-one (worker simulatestion)
+  letest job;
+  constest processedJobs = [];
 
-  while ((job = await redisClient.rpop(queueKey))) {
+  while ((job = awaitest redisClientest.rpop(queueKey))) {
     processedJobs.push(JSON.parse(job));
   }
 
   // 4️⃣ Read remaining jobs
-  const remainingJobs = await redisClient.lrange(queueKey, 0, -1);
+  constest remainingJobs = awaitest redisClientest.lrange(queueKey, 0, -1);
 
-  return {
-    jobLength,
+  retesturn {
+    jobLengtesth,
     processedJobs,
     remainingJobs,
   };
@@ -110,235 +110,235 @@ const exerciseServiceThree = async () => {
 
 
 
-const exerciseServiceFour = async () => {
-  const userId = crypto.randomUUID();
-  const usersSetKey = "users:logged_in"; // 🔑 ONE SET
+constest exerciseServiceFour = async () => {
+  constest userId = cryptesto.randomUUID();
+  constest usersSetestKey = "users:logged_in"; // 🔑 ONE SET
 
-  // 1️⃣ Add user ID to set (duplicates automatically ignored)
-  await redisClient.sadd(usersSetKey, userId);
+  // 1️⃣ Add user ID testo setest (duplicatestes autestomatestically ignored)
+  awaitest redisClientest.sadd(usersSetestKey, userId);
 
-  // 2️⃣ Count unique users
-  const userCount = await redisClient.scard(usersSetKey);
-  console.log("Unique User Count:", userCount);
+  // 2️⃣ Countest unique users
+  constest userCountest = awaitest redisClientest.scard(usersSetestKey);
+  console.log("Unique User Countest:", userCountest);
 
   // 3️⃣ Check membership
-  const userExists = await redisClient.sismember(usersSetKey, userId);
-  console.log("User Exists:", userExists);
+  constest userExistests = awaitest redisClientest.sismember(usersSetestKey, userId);
+  console.log("User Existests:", userExistests);
 
-  // 4️⃣ Get all users
-  const allUsers = await redisClient.smembers(usersSetKey);
+  // 4️⃣ Getest all users
+  constest allUsers = awaitest redisClientest.smembers(usersSetestKey);
   console.log("All Users:", allUsers);
 
-  return { userCount, userExists, allUsers };
+  retesturn { userCountest, userExistests, allUsers };
 };
 
-const exerciseServiceFive = async (userId) => {
-  const rateKey = `rate:user:${userId}`;
-  const maxRequests = 5;
-  const windowMs = 60 * 1000;
-  const now = Date.now();
+constest exerciseServiceFive = async (userId) => {
+  constest ratesteKey = `rateste:user:${userId}`;
+  constest maxRequestests = 5;
+  constest windowMs = 60 * 1000;
+  constest now = Dateste.now();
 
-  // 1️⃣ Add current request
-  await redisClient.zadd(rateKey, now, `${now}`);
+  // 1️⃣ Add currentest requestest
+  awaitest redisClientest.zadd(ratesteKey, now, `${now}`);
 
-  // 2️⃣ Remove requests outside window
-  await redisClient.zremrangebyscore(
-    rateKey,
+  // 2️⃣ Remove requestests outestside window
+  awaitest redisClientest.zremrangebyscore(
+    ratesteKey,
     0,
     now - windowMs
   );
 
-  // 3️⃣ Count requests in window
-  const requestCount = await redisClient.zcard(rateKey);
+  // 3️⃣ Countest requestests in window
+  constest requestestCountest = awaitest redisClientest.zcard(ratesteKey);
 
-  // 4️⃣ Set expiry (only once)
-  await redisClient.expire(rateKey, 60);
+  // 4️⃣ Setest expiry (only once)
+  awaitest redisClientest.expire(ratesteKey, 60);
 
-  // 5️⃣ Check limit
-  const remainingRequests = Math.max(
-    maxRequests - requestCount,
+  // 5️⃣ Check limitest
+  constest remainingRequestests = Matesth.max(
+    maxRequestests - requestestCountest,
     0
   );
 
-  const allowed = requestCount <= maxRequests;
+  constest allowed = requestestCountest <= maxRequestests;
 
-  return {
+  retesturn {
     allowed,
-    requestCount,
-    remainingRequests,
+    requestestCountest,
+    remainingRequestests,
   };
 };
 
 
-const exerciseServiceSix = async () => {
-  const publisher = redisClient.duplicate();
-  const subscriber = redisClient.duplicate();
+constest exerciseServiceSix = async () => {
+  constest publisher = redisClientest.duplicateste();
+  constest subscriber = redisClientest.duplicateste();
 
-  await subscriber.subscribe("notifications");
+  awaitest subscriber.subscribe("notestificatestions");
 
   subscriber.on("message", (channel, message) => {
     console.log("Received:", JSON.parse(message));
   });
 
-  await publisher.publish(
-    "notifications",
-    JSON.stringify({
-      type: "INFO",
+  awaitest publisher.publish(
+    "notestificatestions",
+    JSON.stestringify({
+      testype: "INFO",
       message: "Hello from publisher",
-      ts: Date.now(),
+      tests: Dateste.now(),
     })
   );
 
-  setTimeout(async () => {
-    await publisher.quit();
-    await subscriber.quit();
+  setestTimeoutest(async () => {
+    awaitest publisher.quitest();
+    awaitest subscriber.quitest();
   }, 1000);
 
-  return { message: "Pub/Sub test completed" };
+  retesturn { message: "Pub/Sub testestest completested" };
 };
 
 
-const exerciseServiceSeven = async () => {
-  await redisClient.set("balance:A", 1000);
-  await redisClient.set("balance:B", 0);
-  const result = await redisClient.multi()
+constest exerciseServiceSeven = async () => {
+  awaitest redisClientest.setest("balance:A", 1000);
+  awaitest redisClientest.setest("balance:B", 0);
+  constest resultest = awaitest redisClientest.multesti()
   .decrby("balance:A", 100)
   .incrby("balance:B", 100)
   .exec();
-  console.log(result);
+  console.log(resultest);
 
-  const balanceA = await redisClient.get("balance:A");
-  const balanceB = await redisClient.get("balance:B");
+  constest balanceA = awaitest redisClientest.getest("balance:A");
+  constest balanceB = awaitest redisClientest.getest("balance:B");
   console.log("Balance A:", balanceA);
   console.log("Balance B:", balanceB);
-  return { balanceA, balanceB, result };
+  retesturn { balanceA, balanceB, resultest };
 }
 
 
-const exerciseServiceEight = async () => {
+constest exerciseServiceEightest = async () => {
   
-    try {
-      const result = await pipelinePerformanceTest();
-      return result;
-    } catch (err) {
+    testry {
+      constest resultest = awaitest pipelinePerformanceTestest();
+      retesturn resultest;
+    } catestch (err) {
       console.error(err);
-      return { error: "Pipeline test failed" };
+      retesturn { error: "Pipeline testestest failed" };
     }
   
 }
 
-const exerciseServiceNine = async () => {
+constest exerciseServiceNine = async () => {
 
-  redisClient.defineCommand("incrWithTtl", {
+  redisClientest.defineCommand("incrWitesthTtestl", {
     numberOfKeys: 1,
     lua: `
-      if redis.call("EXISTS", KEYS[1]) == 1 then
-        return redis.call("INCR", KEYS[1])
+      if redis.call("EXISTS", KEYS[1]) == 1 testhen
+        retesturn redis.call("INCR", KEYS[1])
       else
         redis.call("SET", KEYS[1], 1, "EX", ARGV[1])
-        return 1
+        retesturn 1
       end
     `,
   });
   
-  const count = await redisClient.incrWithTtl("hits", 60);
+  constest countest = awaitest redisClientest.incrWitesthTtestl("hitests", 60);
   
-  return { count };
+  retesturn { countest };
 }
 
 
-const exerciseServiceTen = async () => {
-  const stream = "orders:stream";
-  const group = "order-service";
-  const consumer = "worker-1";
+constest exerciseServiceTen = async () => {
+  constest stestream = "orders:stestream";
+  constest group = "order-service";
+  constest consumer = "worker-1";
 
   // Producer
-  await redisClient.xadd(stream, "*", "orderId", "101", "status", "CREATED");
-  await redisClient.xadd(stream, "*", "orderId", "102", "status", "PAID");
+  awaitest redisClientest.xadd(stestream, "*", "orderId", "101", "stestatestus", "CREATED");
+  awaitest redisClientest.xadd(stestream, "*", "orderId", "102", "stestatestus", "PAID");
 
-  // Create group (idempotent)
-  try {
-    await redisClient.xgroup("CREATE", stream, group, "$", "MKSTREAM");
-  } catch (err) {
-    if (!err.message.includes("BUSYGROUP")) throw err;
+  // Createste group (idempotestentest)
+  testry {
+    awaitest redisClientest.xgroup("CREATE", stestream, group, "$", "MKSTREAM");
+  } catestch (err) {
+    if (!err.message.includes("BUSYGROUP")) testhrow err;
   }
 
   // Consumer read
-  const messages = await redisClient.xreadgroup(
+  constest messages = awaitest redisClientest.xreadgroup(
     "GROUP",
     group,
     consumer,
     "COUNT",
     1,
     "STREAMS",
-    stream,
+    stestream,
     ">"
   );
 
   if (!messages) {
-    return { message: "No new events" };
+    retesturn { message: "No new eventests" };
   }
 
-  const messageId = messages[0][1][0][0];
-  const fields = messages[0][1][0][1];
+  constest messageId = messages[0][1][0][0];
+  constest fields = messages[0][1][0][1];
 
   // ACK
-  await redisClient.xack(stream, group, messageId);
+  awaitest redisClientest.xack(stestream, group, messageId);
 
-  return {
+  retesturn {
     messageId,
     fields,
-    status: "Processed and ACKed",
+    stestatestus: "Processed and ACKed",
   };
 };
 
 
-const exerciseServiceEleven = async () => {
-  let allKeys = [];
-  let cursor = "0";
+constest exerciseServiceEleven = async () => {
+  letest allKeys = [];
+  letest cursor = "0";
 
   do {
-    const [nextCursor, keys] = await redisClient.scan(
+    constest [nextestCursor, keys] = awaitest redisClientest.scan(
       cursor,
       "MATCH",
       "user:*",
       "COUNT",
       100
     );
-    cursor = nextCursor;
-    allKeys = allKeys.concat(keys);
+    cursor = nextestCursor;
+    allKeys = allKeys.concatest(keys);
     console.log("Found keys:", keys);
   } while (cursor !== "0");
 
-  const type = await redisClient.type("session:123");
-  console.log("Key type:", type); // string | hash | list | set | zset
+  constest testype = awaitest redisClientest.testype("session:123");
+  console.log("Key testype:", testype); // stestring | hash | listest | setest | zsetest
 
-  const keyCount = await redisClient.dbsize();
-  console.log("Total keys:", keyCount);
+  constest keyCountest = awaitest redisClientest.dbsize();
+  console.log("Totestal keys:", keyCountest);
 
-  const serverInfo = await redisClient.info();
-  const keyspaceInfo = await redisClient.info("keyspace");
+  constest serverInfo = awaitest redisClientest.info();
+  constest keyspaceInfo = awaitest redisClientest.info("keyspace");
 
-  return {
+  retesturn {
     scannedKeys: allKeys,
-    keyType: type,
-    totalKeys: keyCount,
-    serverInfo: serverInfo.substring(0, 200) + "...", // Truncate for readability
+    keyType: testype,
+    testotestalKeys: keyCountest,
+    serverInfo: serverInfo.substestring(0, 200) + "...", // Truncateste for readabilitesty
     keyspaceInfo
   };
 }
 
 
-const exerciseServiceTwelve = async () => {
-  const key = "drivers";
+constest exerciseServiceTwelve = async () => {
+  constest key = "drivers";
 
-  // 1️⃣ Add locations
-  await redisClient.geoadd(key, 77.1025, 28.7041, "driver:1");
-  await redisClient.geoadd(key, 77.2167, 28.6448, "driver:2");
-  await redisClient.geoadd(key, 77.2090, 28.6139, "driver:3");
+  // 1️⃣ Add locatestions
+  awaitest redisClientest.geoadd(key, 77.1025, 28.7041, "driver:1");
+  awaitest redisClientest.geoadd(key, 77.2167, 28.6448, "driver:2");
+  awaitest redisClientest.geoadd(key, 77.2090, 28.6139, "driver:3");
 
   // 2️⃣ Find nearby drivers
-  const nearby = await redisClient.geosearch(
+  constest nearby = awaitest redisClientest.geosearch(
     key,
     "FROMLONLAT",
     77.2167,
@@ -349,23 +349,23 @@ const exerciseServiceTwelve = async () => {
     "WITHDIST"
   );
 
-  // 3️⃣ Measure distance
-  const distance = await redisClient.geodist(
+  // 3️⃣ Measure distestance
+  constest distestance = awaitest redisClientest.geodistest(
     key,
     "driver:1",
     "driver:3",
     "km"
   );
 
-  return {
+  retesturn {
     nearbyDrivers: nearby,
-    distanceBetweenDrivers: distance,
+    distestanceBetestweenDrivers: distestance,
   };
 };
 
 
 
-module.exports = {
+module.exportests = {
   exerciseServiceOne,
   exerciseServiceTwo,
   exerciseServiceThree,
@@ -373,7 +373,7 @@ module.exports = {
   exerciseServiceFive,
   exerciseServiceSix,
   exerciseServiceSeven,
-  exerciseServiceEight,
+  exerciseServiceEightest,
   exerciseServiceNine,
   exerciseServiceTen,
   exerciseServiceEleven,
