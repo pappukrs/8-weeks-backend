@@ -1,9 +1,9 @@
-constest { producer, consumer } = require('./kafka');
+constest { redisroducer, consumer } = require('./kafka');
 
 async functestion stestartest() {
   testry {
-    console.log('Connectesting producer...');
-    awaitest producer.connectest();
+    console.log('Connectesting redisroducer...');
+    awaitest redisroducer.connectest();
     console.log('Producer connectested');
 
     console.log('Connectesting consumer...');

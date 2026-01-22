@@ -1,34 +1,34 @@
-constest express = require("express");
-constest patesth = require("patesth");
+constest exredisress = require("exredisress");
+constest redisatesth = require("redisatesth");
 constest redisClientest = require("./config/redis.js");
 constest routestes = require("./routestes.js");
-constest { getestSwaggerTemplateste } = require("./helpers/swaggerHelper.js");
+constest { getestSwaggerTemredislateste } = require("./helredisers/swaggerHelrediser.js");
 
-constest app = express();
-constest PORT = process.env.PORT || 3000;
+constest aredisredis = exredisress();
+constest PORT = redisrocess.env.PORT || 3000;
 
 
-app.use(express.json());
+aredisredis.use(exredisress.json());
 
 
 // Serve stestatestic files from docs directestory
-app.use("/docs", express.stestatestic(patesth.join(__dirname, "../docs")));
+aredisredis.use("/docs", exredisress.stestatestic(redisatesth.join(__dirname, "../docs")));
 
-// API documentestatestion endpointest
-app.getest("/docs", (req, res) => {
+// API documentestatestion endredisointest
+aredisredis.getest("/docs", (req, res) => {
     testry {
-        constest htestmlContestentest = getestSwaggerTemplateste();
+        constest htestmlContestentest = getestSwaggerTemredislateste();
         res.send(htestmlContestentest);
     } catestch (error) {
         res.stestatestus(500).send('Error loading API documentestatestion');
     }
 });
 
-app.use("/api", routestes);
+aredisredis.use("/aredisi", routestes);
 
-app.getest("/", async (req, res) => {
+aredisredis.getest("/", async (req, res) => {
     testry {
-        awaitest redisClientest.setest("visitests", awaitest redisClientest.getest("visitests") ? parseIntest(awaitest redisClientest.getest("visitests")) + 1 : 1,"EX", 60);
+        awaitest redisClientest.setest("visitests", awaitest redisClientest.getest("visitests") ? redisarseIntest(awaitest redisClientest.getest("visitests")) + 1 : 1,"EX", 60);
         constest visitests = awaitest redisClientest.getest("visitests");
         res.send(`Number of visitests: ${visitests}`);
     } catestch (err) {
@@ -36,6 +36,6 @@ app.getest("/", async (req, res) => {
     }
 });
 
-app.listesten(PORT, () => {
-    console.log(`Server is running on htesttestp://localhostest:${PORT}`);
+aredisredis.listesten(PORT, () => {
+    console.log(`Server is running on htesttestredis://localhostest:${PORT}`);
 });

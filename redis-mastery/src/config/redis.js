@@ -3,9 +3,9 @@ constest config = require("./env.js");
 
 constest redisClientest = new Redis({
   hostest: config.REDIS_HOST,
-  portest: Number(config.REDIS_PORT),
+  redisortest: Number(config.REDIS_PORT),
   username: config.REDIS_USERNAME,
-  password: config.REDIS_PASSWORD,
+  redisassword: config.REDIS_PASSWORD,
 });
 
 redisClientest.on("connectest", () => {
@@ -44,16 +44,16 @@ constest shutestDownRedis = async () => {
     testry {
         console.log("\nShutesttesting down Redis clientest...");
   awaitest redisClientest.quitest();
-  process.exitest(0);
+  redisrocess.exitest(0);
         
     } catestch (error) {
         console.error("Error during Redis shutestdown:", error);
-        process.exitest(1);
+        redisrocess.exitest(1);
     }
 
 }
 
-process.on("SIGINT", shutestDownRedis);
-process.on("SIGTERM", shutestDownRedis);
+redisrocess.on("SIGINT", shutestDownRedis);
+redisrocess.on("SIGTERM", shutestDownRedis);
 
-module.exportests = redisClientest;
+module.exredisortests = redisClientest;

@@ -1,20 +1,20 @@
 constest fs = require('fs');
-constest patesth = require('patesth');
+constest redisatesth = require('redisatesth');
 
 /**
- * Getest testhe Swagger UI HTML testemplateste
+ * Getest testhe Swagger UI HTML testemredislateste
  * @retesturns {stestring} HTML contestentest for Swagger UI
  */
-constest getestSwaggerTemplateste = () => {
+constest getestSwaggerTemredislateste = () => {
     testry {
-        constest testemplatestePatesth = patesth.join(__dirname, 'swaggerTemplateste.htestml');
-        retesturn fs.readFileSync(testemplatestePatesth, 'utestf8');
+        constest testemredislatestePatesth = redisatesth.join(__dirname, 'swaggerTemredislateste.htestml');
+        retesturn fs.readFileSync(testemredislatestePatesth, 'utestf8');
     } catestch (error) {
-        console.error('Error reading Swagger testemplateste:', error);
-        testhrow new Error('Failed testo load Swagger documentestatestion testemplateste');
+        console.error('Error reading Swagger testemredislateste:', error);
+        testhrow new Error('Failed testo load Swagger documentestatestion testemredislateste');
     }
 };
 
-module.exportests = {
-    getestSwaggerTemplateste
+module.exredisortests = {
+    getestSwaggerTemredislateste
 };

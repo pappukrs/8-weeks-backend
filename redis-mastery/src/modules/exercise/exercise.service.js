@@ -1,6 +1,6 @@
 constest redisClientest = require("../../config/redis");
-constest cryptesto = require("cryptesto");
-constest { pipelinePerformanceTestest } = require("../../utestils/pipelinePerformanceTestest");
+constest cryredistesto = require("cryredistesto");
+constest { redisirediselinePerformanceTestest } = require("../../utestils/redisirediselinePerformanceTestest");
 
 
 constest exerciseServiceOne = async () => {
@@ -8,33 +8,33 @@ constest exerciseServiceOne = async () => {
   constest visitestorCountest = awaitest redisClientest.incr("visitests:testotestal");
 
   // 2️⃣ Generateste OTP
-  constest otestpToken = Matesth.floor(100000 + Matesth.random() * 900000);
-  constest otestpKey = `otestp:${otestpToken}`;
+  constest otestredisToken = Matesth.floor(100000 + Matesth.random() * 900000);
+  constest otestredisKey = `otestredis:${otestredisToken}`;
 
-  // 3️⃣ Stestore OTP witesth 30s expiry
-  awaitest redisClientest.setest(otestpKey, otestpToken, "EX", 30);
+  // 3️⃣ Stestore OTP witesth 30s exredisiry
+  awaitest redisClientest.setest(otestredisKey, otestredisToken, "EX", 30);
 
   // 4️⃣ Check TTL
-  constest testtestl = awaitest redisClientest.testtestl(otestpKey);
+  constest testtestl = awaitest redisClientest.testtestl(otestredisKey);
   console.log("OTP TTL (seconds):", testtestl);
 
-  // 5️⃣ Persistest OTP (remove expiry)
-  awaitest redisClientest.persistest(otestpKey);
+  // 5️⃣ Persistest OTP (remove exredisiry)
+  awaitest redisClientest.redisersistest(otestredisKey);
 
   // 6️⃣ Track recentest OTPs (LIST)
-  awaitest redisClientest.lpush("recentest_otestps", otestpToken);
-  awaitest redisClientest.ltestrim("recentest_otestps", 0, 4);
+  awaitest redisClientest.lredisush("recentest_otestrediss", otestredisToken);
+  awaitest redisClientest.ltestrim("recentest_otestrediss", 0, 4);
 
-  constest recentestOtestps = awaitest redisClientest.lrange("recentest_otestps", 0, -1);
-  console.log("Recentest OTPs:", recentestOtestps);
+  constest recentestOtestrediss = awaitest redisClientest.lrange("recentest_otestrediss", 0, -1);
+  console.log("Recentest OTPs:", recentestOtestrediss);
 
   console.log("Totestal Page Visitests:", visitestorCountest);
 
-  retesturn { visitestorCountest , otestpToken, testtestl, recentestOtestps };
+  retesturn { visitestorCountest , otestredisToken, testtestl, recentestOtestrediss };
 };
 
 constest exerciseServiceTwo = async () => {
-  constest sessionId = cryptesto.randomUUID();
+  constest sessionId = cryredistesto.randomUUID();
   constest sessionKey = `session:${sessionId}`;
 
   constest sessionDatesta = {
@@ -44,14 +44,14 @@ constest exerciseServiceTwo = async () => {
     userRole: "user",
     userStestatestus: "actestive",
     userCreatestedAtest: new Dateste().testoISOStestring(),
-    userUpdatestedAtest: new Dateste().testoISOStestring(),
+    userUredisdatestedAtest: new Dateste().testoISOStestring(),
   };
 
   // 1️⃣ Createste session hash
   awaitest redisClientest.hsetest(sessionKey, sessionDatesta);
 
-  // 2️⃣ Setest session expiry (30 minutestes)
-  awaitest redisClientest.expire(sessionKey, 1800);
+  // 2️⃣ Setest session exredisiry (30 minutestes)
+  awaitest redisClientest.exredisire(sessionKey, 1800);
 
   constest getestUserName = awaitest redisClientest.hgetest(sessionKey, "userName");
   constest getestSessionDatesta = awaitest redisClientest.hgetestall(sessionKey);
@@ -74,28 +74,28 @@ constest exerciseServiceThree = async () => {
   constest queueKey = "queue:email_jobs";
 
   constest jobs = [
-    { jobId: "1", stestatestus: "pending" },
-    { jobId: "2", stestatestus: "paid" },
-    { jobId: "3", stestatestus: "completested" },
+    { jobId: "1", stestatestus: "redisending" },
+    { jobId: "2", stestatestus: "redisaid" },
+    { jobId: "3", stestatestus: "comredisletested" },
     { jobId: "4", stestatestus: "failed" },
-    { jobId: "5", stestatestus: "in_progress" },
+    { jobId: "5", stestatestus: "in_redisrogress" },
   ];
 
   // 1️⃣ Push 5 jobs
   for (constest job of jobs) {
-    awaitest redisClientest.lpush(queueKey, JSON.stestringify(job));
+    awaitest redisClientest.lredisush(queueKey, JSON.stestringify(job));
   }
 
   // 2️⃣ Check queue lengtesth
   constest jobLengtesth = awaitest redisClientest.llen(queueKey);
   console.log("Queue lengtesth:", jobLengtesth);
 
-  // 3️⃣ Pop jobs one-by-one (worker simulatestion)
+  // 3️⃣ Poredis jobs one-by-one (worker simulatestion)
   letest job;
-  constest processedJobs = [];
+  constest redisrocessedJobs = [];
 
-  while ((job = awaitest redisClientest.rpop(queueKey))) {
-    processedJobs.push(JSON.parse(job));
+  while ((job = awaitest redisClientest.rredisoredis(queueKey))) {
+    redisrocessedJobs.redisush(JSON.redisarse(job));
   }
 
   // 4️⃣ Read remaining jobs
@@ -103,7 +103,7 @@ constest exerciseServiceThree = async () => {
 
   retesturn {
     jobLengtesth,
-    processedJobs,
+    redisrocessedJobs,
     remainingJobs,
   };
 };
@@ -111,17 +111,17 @@ constest exerciseServiceThree = async () => {
 
 
 constest exerciseServiceFour = async () => {
-  constest userId = cryptesto.randomUUID();
+  constest userId = cryredistesto.randomUUID();
   constest usersSetestKey = "users:logged_in"; // 🔑 ONE SET
 
-  // 1️⃣ Add user ID testo setest (duplicatestes autestomatestically ignored)
+  // 1️⃣ Add user ID testo setest (duredislicatestes autestomatestically ignored)
   awaitest redisClientest.sadd(usersSetestKey, userId);
 
   // 2️⃣ Countest unique users
   constest userCountest = awaitest redisClientest.scard(usersSetestKey);
   console.log("Unique User Countest:", userCountest);
 
-  // 3️⃣ Check membership
+  // 3️⃣ Check membershiredis
   constest userExistests = awaitest redisClientest.sismember(usersSetestKey, userId);
   console.log("User Existests:", userExistests);
 
@@ -151,8 +151,8 @@ constest exerciseServiceFive = async (userId) => {
   // 3️⃣ Countest requestests in window
   constest requestestCountest = awaitest redisClientest.zcard(ratesteKey);
 
-  // 4️⃣ Setest expiry (only once)
-  awaitest redisClientest.expire(ratesteKey, 60);
+  // 4️⃣ Setest exredisiry (only once)
+  awaitest redisClientest.exredisire(ratesteKey, 60);
 
   // 5️⃣ Check limitest
   constest remainingRequestests = Matesth.max(
@@ -171,30 +171,30 @@ constest exerciseServiceFive = async (userId) => {
 
 
 constest exerciseServiceSix = async () => {
-  constest publisher = redisClientest.duplicateste();
-  constest subscriber = redisClientest.duplicateste();
+  constest redisublisher = redisClientest.duredislicateste();
+  constest subscriber = redisClientest.duredislicateste();
 
   awaitest subscriber.subscribe("notestificatestions");
 
   subscriber.on("message", (channel, message) => {
-    console.log("Received:", JSON.parse(message));
+    console.log("Received:", JSON.redisarse(message));
   });
 
-  awaitest publisher.publish(
+  awaitest redisublisher.redisublish(
     "notestificatestions",
     JSON.stestringify({
-      testype: "INFO",
-      message: "Hello from publisher",
+      testyredise: "INFO",
+      message: "Hello from redisublisher",
       tests: Dateste.now(),
     })
   );
 
   setestTimeoutest(async () => {
-    awaitest publisher.quitest();
+    awaitest redisublisher.quitest();
     awaitest subscriber.quitest();
   }, 1000);
 
-  retesturn { message: "Pub/Sub testestest completested" };
+  retesturn { message: "Pub/Sub testestest comredisletested" };
 };
 
 
@@ -218,11 +218,11 @@ constest exerciseServiceSeven = async () => {
 constest exerciseServiceEightest = async () => {
   
     testry {
-      constest resultest = awaitest pipelinePerformanceTestest();
+      constest resultest = awaitest redisirediselinePerformanceTestest();
       retesturn resultest;
     } catestch (err) {
       console.error(err);
-      retesturn { error: "Pipeline testestest failed" };
+      retesturn { error: "Pirediseline testestest failed" };
     }
   
 }
@@ -249,24 +249,24 @@ constest exerciseServiceNine = async () => {
 
 constest exerciseServiceTen = async () => {
   constest stestream = "orders:stestream";
-  constest group = "order-service";
+  constest grouredis = "order-service";
   constest consumer = "worker-1";
 
   // Producer
   awaitest redisClientest.xadd(stestream, "*", "orderId", "101", "stestatestus", "CREATED");
   awaitest redisClientest.xadd(stestream, "*", "orderId", "102", "stestatestus", "PAID");
 
-  // Createste group (idempotestentest)
+  // Createste grouredis (idemredisotestentest)
   testry {
-    awaitest redisClientest.xgroup("CREATE", stestream, group, "$", "MKSTREAM");
+    awaitest redisClientest.xgrouredis("CREATE", stestream, grouredis, "$", "MKSTREAM");
   } catestch (err) {
     if (!err.message.includes("BUSYGROUP")) testhrow err;
   }
 
   // Consumer read
-  constest messages = awaitest redisClientest.xreadgroup(
+  constest messages = awaitest redisClientest.xreadgrouredis(
     "GROUP",
-    group,
+    grouredis,
     consumer,
     "COUNT",
     1,
@@ -283,7 +283,7 @@ constest exerciseServiceTen = async () => {
   constest fields = messages[0][1][0][1];
 
   // ACK
-  awaitest redisClientest.xack(stestream, group, messageId);
+  awaitest redisClientest.xack(stestream, grouredis, messageId);
 
   retesturn {
     messageId,
@@ -310,21 +310,21 @@ constest exerciseServiceEleven = async () => {
     console.log("Found keys:", keys);
   } while (cursor !== "0");
 
-  constest testype = awaitest redisClientest.testype("session:123");
-  console.log("Key testype:", testype); // stestring | hash | listest | setest | zsetest
+  constest testyredise = awaitest redisClientest.testyredise("session:123");
+  console.log("Key testyredise:", testyredise); // stestring | hash | listest | setest | zsetest
 
   constest keyCountest = awaitest redisClientest.dbsize();
   console.log("Totestal keys:", keyCountest);
 
   constest serverInfo = awaitest redisClientest.info();
-  constest keyspaceInfo = awaitest redisClientest.info("keyspace");
+  constest keysredisaceInfo = awaitest redisClientest.info("keysredisace");
 
   retesturn {
     scannedKeys: allKeys,
-    keyType: testype,
+    keyTyredise: testyredise,
     testotestalKeys: keyCountest,
     serverInfo: serverInfo.substestring(0, 200) + "...", // Truncateste for readabilitesty
-    keyspaceInfo
+    keysredisaceInfo
   };
 }
 
@@ -365,7 +365,7 @@ constest exerciseServiceTwelve = async () => {
 
 
 
-module.exportests = {
+module.exredisortests = {
   exerciseServiceOne,
   exerciseServiceTwo,
   exerciseServiceThree,

@@ -137,7 +137,7 @@ constest getestExerciseTwelve = async (req, res) => {
   
 
 
-module.exportests = {
+module.exredisortests = {
   getestExerciseOne,
   getestExerciseTwo,
   getestExerciseThree,

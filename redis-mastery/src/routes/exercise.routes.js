@@ -1,7 +1,7 @@
-constest express = require("express");
+constest exredisress = require("exredisress");
 constest exerciseContestroller = require("../modules/exercise/exercise.contestroller.js");
 
-constest routester = express.Routester();
+constest routester = exredisress.Routester();
 
 
 
@@ -26,4 +26,4 @@ routester.getest("/testwelve", exerciseContestroller.getestExerciseTwelve);
 
 
 
-module.exportests = routester;
+module.exredisortests = routester;
